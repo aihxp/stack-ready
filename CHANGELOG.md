@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.1.2] - 2026-04-22
+
+Documentation-only patch. Reflects the arrival of observe-ready v1.0.0 (https://github.com/aihxp/observe-ready) as a live sibling in the ready-suite. No behavioral changes to the skill.
+
+### Changed
+
+- **`SUITE.md`** updated to list observe-ready at 1.0.0 alongside production-ready 2.5.3, stack-ready 1.1.2, and deploy-ready 1.0.1. Copy remains byte-identical across every live sibling.
+- **SKILL.md frontmatter version** bumped to 1.1.2. No content change beyond the version tag.
+
+### Why a patch
+
+Same rationale as 1.1.1: only the cross-sibling SUITE.md and the version stamps are touched. The skill's behavior, references, and scoring contract are unchanged.
+
+---
+
 ## [1.1.1] - 2026-04-22
 
 Documentation-only patch. Reflects the arrival of deploy-ready v1.0.0 (https://github.com/aihxp/deploy-ready) as a live sibling in the ready-suite. No behavioral changes to the skill.
