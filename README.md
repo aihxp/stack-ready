@@ -11,8 +11,10 @@ Stack Ready is a **skill**, a structured AI instruction set that any coding agen
 > **Pairs with [production-ready](https://github.com/aihxp/production-ready) and [repo-ready](https://github.com/aihxp/repo-ready).** Stack Ready picks the stack; Production Ready builds the app; Repo Ready wraps the repo. Three tight skills that compose.
 
 <p align="center">
-<strong>12 domains</strong> &nbsp;·&nbsp; <strong>12 scoring dimensions</strong> &nbsp;·&nbsp; <strong>36 pre-combined bundles</strong> &nbsp;·&nbsp; <strong>4 decision tiers</strong>
+<strong>12 domains</strong> &nbsp;·&nbsp; <strong>12 scoring dimensions</strong> &nbsp;·&nbsp; <strong>41 compatibility-checked bundles</strong> &nbsp;·&nbsp; <strong>4 decision tiers</strong> &nbsp;·&nbsp; <strong>~150 verified sources</strong>
 </p>
+
+> **v1.1.0 (2026-04-22)** refreshed every scoring decision against primary sources: State of JS 2024, Stack Overflow Dev Survey 2024-2025, JavaScript Rising Stars 2024/2025, DB-Engines trends, ThoughtWorks Tech Radar Vol 31/34, State of Django 2025, State of Laravel 2025, 37signals cloud-exit public numbers, and ~150 more. Evidence captured in [`references/RESEARCH-2026-04.md`](references/RESEARCH-2026-04.md). See [CHANGELOG](CHANGELOG.md) for the full shift list.
 
 ## Install
 
@@ -196,9 +198,11 @@ Every domain profile scores candidates across the same 12 dimensions. Scores are
 | 11 | **Email / notifications** | Resend, Postmark, SendGrid, AWS SES, Loops, Knock, Novu |
 | 12 | **Background jobs / queues** | Inngest, Trigger.dev, BullMQ, SQS, Sidekiq, Celery, Oban, Temporal |
 
-## 36 pre-combined bundles
+## 41 compatibility-checked bundles
 
-Each of the 12 domains ships with three pre-combined bundles, compatibility-checked, ready to score. These are the starting shortlists.
+Each of the 12 domains ships with three pre-combined bundles (Safe Default / Fast-to-Ship / Enterprise), for 36 in total. v1.1.0 added 5 cross-domain named bundles covering the non-React-default world.
+
+### Per-domain archetypes
 
 | Archetype | Fit profile |
 |---|---|
@@ -206,7 +210,17 @@ Each of the 12 domains ships with three pre-combined bundles, compatibility-chec
 | **Fast-to-Ship** | Solo or very small team, wants BaaS leverage, minimal ops surface, willing to trade scale ceiling for velocity. The MVP pick. |
 | **Enterprise** | 10+ engineers, compliance in scope, self-host or portability matters, ops maturity, scale ceiling is higher than any single bundle can absorb. The "will survive" pick. |
 
-See `references/stack-bundles.md` for all 36, including the anti-pairings each bundle avoids.
+### Cross-domain named bundles (new in v1.1.0)
+
+| Bundle | Fit |
+|---|---|
+| **Cloudflare-native** | Workers + D1 (or Hyperdrive + Neon) + R2 + Durable Objects + Drizzle + Better Auth / Clerk. Edge-first apps, AI inference, post-CF-Astro-acquisition content stacks. |
+| **Post-Cloud Rails** | Rails 8 + Hotwire + Kamal 2 + Hetzner VPS + Solid Queue/Cache/Cable + Postmark. Backed by 37signals' $10M+/5yr exit savings; real pattern, not a meme. |
+| **Phoenix LiveView** | Phoenix 1.8 + LiveView 1.1 + Ecto + Oban + Fly.io. Soft-realtime native. Helpdesk, collab, presence, live dashboards. |
+| **Django + HTMX + Alpine** | Django 6 + HTMX + Alpine + Tailwind. HTMX adoption among Django devs grew 5% to 24% (2021-2025). Canonical for CMS, B2B admin, internal tools in Python shops. |
+| **TALL / Laravel + Livewire** | Laravel 12 + Livewire (62% per State of Laravel 2025) + Alpine + Tailwind + Forge. PHP's most polished SaaS stack. |
+
+See [`references/stack-bundles.md`](references/stack-bundles.md) for full per-dimension fills with coherence rationale and flip indicators for all 41.
 
 ## Pairing rules
 
@@ -242,7 +256,7 @@ Managed-data-layer alternatives (Convex, Supabase, Firebase, Appwrite, PocketBas
 
 ## Reference library
 
-9 files, loaded on demand. A typical session reads 3-5, never all 9.
+10 files, loaded on demand. A typical session reads 3-5, never all 10.
 
 <details>
 <summary>View the full reference library</summary>
@@ -251,18 +265,20 @@ Managed-data-layer alternatives (Convex, Supabase, Firebase, Appwrite, PocketBas
 |---|---|---|
 | **Always loaded** | | |
 | `stack-research.md` | Mode detection, codebase inventory protocol, stack-sniffing | ~8K |
-| `preflight-and-constraints.md` | 6 pre-flight questions, compliance-to-constraint map | ~7K |
+| `preflight-and-constraints.md` | 7 pre-flight questions (domain, team, budget, ship window, scale, compliance, reversibility), compliance-to-constraint map | ~8K |
 | **Tier 1** | | |
 | `domain-stacks.md` | 12 domains, per-dimension picks with rationale, flip points | ~22K |
-| `stack-bundles.md` | 36 pre-combined bundles (Safe / Fast-to-Ship / Enterprise x 12) | ~12K |
+| `stack-bundles.md` | 36 per-domain bundles plus 5 cross-domain named bundles (Cloudflare-native, Post-Cloud Rails, Phoenix LiveView, Django+HTMX+Alpine, TALL/Laravel+Livewire) | ~16K |
 | **Tier 2** | | |
-| `pairing-rules.md` | Anti-pairings, overlap detection, legitimate-exception cases | ~6K |
-| `scoring-framework.md` | 12 dimensions, default weights, override mechanics, score discipline | ~9K |
+| `pairing-rules.md` | Anti-pairings, overlap detection, legitimate-exception cases, staleness notes | ~7K |
+| `scoring-framework.md` | 12 dimensions including split Ecosystem (depth + trajectory) and Exit cost axes; default weights; override mechanics; when to skip scoring entirely | ~11K |
 | **Tier 3 / on-demand** | | |
-| `dimension-deep-dives.md` | Per-dimension analysis for close-call decisions | ~16K |
+| `dimension-deep-dives.md` | Per-dimension analysis: framework, TS backend (Hono), JS runtime, data, auth, UI, hosting, observability (including LLM sub-section), payments, email, jobs | ~18K |
 | `tradeoff-narratives.md` | Flip points, scale ceilings, switching costs per candidate | ~11K |
 | **Mode D only** | | |
-| `migration-paths.md` | X-to-Y sequences: Firebase to Postgres, Auth0 to Clerk, Vercel to self-host, etc. | ~13K |
+| `migration-paths.md` | X-to-Y sequences: Firebase to Postgres, Auth0 to Clerk, Vercel to self-host, Auth.js to Better Auth, etc. | ~13K |
+| **Evidence base (on demand)** | | |
+| `RESEARCH-2026-04.md` | Consolidated research dossier behind v1.1.0 scoring. ~150 verified primary-source URLs across Stack Overflow Dev Survey 2024-2025, State of JS 2024, Rising Stars 2024/2025, DB-Engines, ThoughtWorks Tech Radar, 37signals cloud-exit, migration postmortems. Every scoring shift traceable here. | ~30K |
 
 </details>
 
