@@ -32,6 +32,7 @@ Reject these outright in Step 4. Do not score bundles that contain them.
 | **Clerk + Better Auth** | Two user stores. Impossible to keep in sync. RBAC becomes incoherent. |
 | **Clerk + WorkOS** | Two user stores. |
 | **Better Auth + WorkOS** | Same. Pick WorkOS if enterprise SSO is required; pick Better Auth if it isn't. |
+| **Auth.js + Better Auth (new project)** | Auth.js folded into Better Auth in September 2025; Auth.js is now in security-patch mode and maintainers direct new projects to Better Auth. Running both in parallel in a new project is a temporary migration state, not an architecture. |
 | **Auth.js + Clerk** | Same. |
 | **Supabase Auth + Clerk** | Same. |
 | **Firebase Auth + Supabase Auth** | Same. |
@@ -76,9 +77,16 @@ Reject these outright in Step 4. Do not score bundles that contain them.
 
 | Anti-pairing | Why it breaks |
 |---|---|
-| **Next.js + Remix in the same monorepo sharing routes** | Not a monorepo pattern, an in-progress migration. If you're truly serving some routes via Next.js and some via Remix, you are paying a split-framework tax; plan to unify. |
+| **Next.js + Remix / React Router v7 in the same monorepo sharing routes** | Not a monorepo pattern, an in-progress migration. (Note: Remix v2 merged into React Router v7 in November 2024; if an older bundle references "Remix v2+", the current name is React Router v7. Remix v3 forks Preact and drops React; treat it as a separate product.) |
 | **Rails + Phoenix for the same app domain** | Language barrier at the framework level. If you have both, something is migrating. |
 | **Django + FastAPI for the same app** | Same. |
+
+### Sync engine conflicts (new)
+
+| Anti-pairing | Why it breaks |
+|---|---|
+| **Two sync engines on the same shared state** (Convex + Liveblocks for a single collaborative doc, Convex + Replicache over the same entity, Supabase Realtime + Convex) | Each sync engine is a source of truth for reactivity; overlapping them on the same data creates ordering ambiguity. One can sit below the other (e.g., Liveblocks for cursor presence on top of a Convex-stored document) but only when the scopes are clearly disjoint. |
+| **"Backend-in-a-box" doubles** (Supabase + Convex, PocketBase + Supabase) | Each replaces DB + auth + storage + realtime. Running two is usually mid-migration or an unresolved platform choice. |
 
 ## Soft anti-pairings
 
@@ -233,9 +241,19 @@ These look like anti-pairings at a glance but are fine.
 Pairing rules change when platforms evolve. Examples of shifts in the last 24 months:
 
 - **Supabase gained a strong Auth story**, making Supabase Auth + Supabase DB a coherent single-vendor bundle.
-- **Convex expanded its query model**, raising its ceiling for moderate-complexity SaaS.
-- **WorkOS added AuthKit**, becoming a more polished choice for enterprise-first apps.
+- **Convex expanded its query model**, raising its ceiling for moderate-complexity SaaS. **Convex open-sourced under FSL Apache 2.0 (Feb 2025)** and is now self-hostable on Postgres/MySQL/SQLite; lock-in concerns have softened.
+- **WorkOS added AuthKit**, becoming the procurement-friendly choice for enterprise-first apps (1M MAU free tier).
 - **Clerk introduced Organizations**, reducing the need for custom multi-tenant code.
-- **Astro gained server-side capability**, shifting its pairing with frameworks like Vercel AI SDK.
+- **Astro gained server-side capability** and **was acquired by Cloudflare (January 2026)**, making Astro + Workers a natural pairing.
+- **Auth.js folded into Better Auth (September 2025).** Auth.js is in security-patch mode; Better Auth is the TypeScript-native default for self-hosted identity.
+- **Remix v2 merged into React Router v7 (November 2024).** Remix v3 (announced May 2025) forks Preact and drops React; any reference to "Remix v2+" is stale.
+- **Stripe acquired Lemon Squeezy (July 2024)** and launched Stripe Managed Payments (private beta April 2025). Lemon Squeezy is being absorbed; Polar (4% + $0.40) is the new indie-favored MoR.
+- **Prisma 7 (late 2025) removed the Rust query engine.** Prisma's historical bundle-size and cold-start disadvantages vs Drizzle have narrowed materially; don't penalize Prisma for those anymore.
+- **Neon acquired by Databricks (~$1B, May 2025)**; storage pricing dropped ~80%. PlanetScale launched Postgres on Neki (September 2025), ending the "MySQL-only" PlanetScale.
+- **Redis license pivoted to SSPL/AGPL (2024).** Valkey (Linux Foundation) captured the "default cache" narrative; DragonflyDB and Upstash complete the fork landscape. "Redis" now means "Redis-compatible protocol," not the product.
+- **Highlight.io acquired by LaunchDarkly and shuts down Feb 28, 2026.** Any bundle that references Highlight must migrate (LaunchDarkly Observability or Sentry Replay / OpenReplay).
+- **Anthropic acquired Bun (December 2025).** Bun production viability materially improved; still requires staging validation for npm edge cases.
+- **Vercel shipped Fluid Compute + Active CPU pricing (April 2025).** Up to 90% cost cut for idle-heavy workloads (LLM, streaming). Bill-shock still exists at egress and image optimization.
+- **Cloudflare Developer Platform matured:** D1, Queues, Hyperdrive GA (April 2024); Workflows GA (2025); Durable Objects with SQLite on free tier; Cloudflare Containers launched mid-2025.
 
-Re-read this file every 3-6 months or when a major vendor shift is announced.
+Re-read this file every 3-6 months or when a major vendor shift is announced. See `RESEARCH-2026-04.md` for the evidence base behind these shifts.

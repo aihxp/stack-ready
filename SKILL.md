@@ -1,7 +1,7 @@
 ---
 name: stack-ready
 description: "Choose the right stack for a project before building it. Triggers on 'what stack should I use,' 'Next.js vs. Remix,' 'pick a database,' 'Postgres or Mongo,' 'which auth provider,' 'should I use Convex,' 'hosting recommendation,' 'move from Firebase to Supabase,' or any request to evaluate tech choices for a specific job. Outputs a ranked, scored shortlist with tradeoffs, pairing compatibility checks, and bundle recommendations tailored to domain, team size, budget, and time-to-ship. Stops at the recommendation: does not build the app (that's production-ready) or configure the repo (that's repo-ready). Not for purely abstract language debates with no project attached. Full trigger list in README."
-version: 1.0.0
+version: 1.1.0
 updated: 2026-04-22
 changelog: CHANGELOG.md
 compatible_with:
@@ -41,6 +41,7 @@ Route elsewhere if the request is:
 - **Repo hygiene** ("set up CI for my Next.js app"). That's `repo-ready`.
 - **Single-library evaluation** ("is zod or valibot faster"). Answer inline; the full workflow is overkill for a single-dimension choice unless the user explicitly wants the full scoring pass.
 - **Vendor-specific sales questions** ("is Vercel worth the price for my company"). Answer factually; do not run the full comparison workflow unless the user is genuinely choosing between options.
+- **The team already knows and is confident.** If the user explicitly states "we've shipped three apps on Rails; we're picking Rails again; confirm it still fits," run a compact pre-flight and constraint check only; do not run the full scoring pass. See `references/scoring-framework.md` § "When to skip the scoring pass entirely." Formal scoring applied to reversible, experience-backed, low-stakes decisions by a small team is itself a failure mode (paralysis by analysis); recognize when the skill's rigor is more cost than value.
 
 ## Workflow
 
@@ -185,7 +186,7 @@ Contents:
 # Stack Decision
 
 ## Skill version
-stack-ready 1.0.0, 2026-04-22. If a newer version runs this artifact through again, re-run the staleness check (Step 9) before making stack changes.
+stack-ready 1.1.0, 2026-04-22. If a newer version runs this artifact through again, re-run the staleness check (Step 9) before making stack changes.
 
 ## Project
 [one-line description]
@@ -228,6 +229,14 @@ Aggregate score: X.X / 10
 ## Rejected bundles and why
 - [bundle]: [reason it lost]
 
+## Prior art and analogous picks
+Three real deployments with a comparable stack at comparable scale, each in one line:
+- [Project / company]: [stack summary]. [Status / how it's held up, with a date if known.]
+- [Project / company]: [stack summary]. [Status.]
+- [Project / company]: [stack summary]. [Status.]
+
+(Borrowed from Rust's RFC process. "We looked at three real deployments" is the strongest defense against horoscope-shaped recommendations. If prior art can't be named honestly, the pick is more novel than claimed; reconsider.)
+
 ## Open questions left to the user
 - [question] (owner: [name], due: [date])
 
@@ -243,7 +252,7 @@ Aggregate score: X.X / 10
 Stack recommendations rot. At the end of every run, print:
 
 ```
-Skill version: stack-ready 1.0.0
+Skill version: stack-ready 1.1.0
 Last updated: 2026-04-22
 Current date: [today]
 ```
@@ -346,6 +355,7 @@ The body above is enough to start. Load each reference *before* the step that us
 | `dimension-deep-dives.md` | **On demand.** Open per dimension when a candidate is close-call. | ~16K |
 | `tradeoff-narratives.md` | **Tier 3.** Step 6; flip points, scale ceilings, switching costs. | ~11K |
 | `migration-paths.md` | **Mode D only.** Step 7; X-to-Y migration sequences. | ~13K |
+| `RESEARCH-2026-04.md` | **On demand.** When the user asks "why this score" or "what's the evidence"; source citations for 1.1.0's refresh. | ~30K |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming a project, confirm the skill version your session loaded matches the version recorded in `.stack-ready/STATE.md` if one exists. A skill update between sessions can move scores, add candidates (Convex released a new tier, Cloudflare acquired a vendor, Prisma published a major version), or change anti-pairings. If versions differ, re-run the scoring pass on the shortlisted bundles before continuing.
 
@@ -359,7 +369,7 @@ Stack decisions can span sessions, especially in Mode C (audit) or Mode D (migra
 # Stack-Ready State
 
 ## Skill version
-stack-ready 1.0.0, 2026-04-22.
+stack-ready 1.1.0, 2026-04-22.
 
 ## Current tier
 Working toward Tier [N]. Last completed tier: [N-1].

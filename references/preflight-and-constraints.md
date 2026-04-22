@@ -126,6 +126,39 @@ Each constraint is a hard filter in Step 2. Convert them to candidate rejections
 
 **If the user says nothing:** ask explicitly for regulated domains (healthcare, finance, education, government, children's data). For other domains, default to "no named compliance constraints" and state it.
 
+### 7. Reversibility posture
+
+> Is this decision you can change in ~4 weeks if wrong, or is it foundational for 3+ years?
+
+Borrowed from Dan McKinley's "innovation tokens" framing and evidence from migration postmortems: the same score on two dimensions can have 10x different real-world cost depending on reversibility. A DB pick is rarely reversible in under six months; a UI library swap is often 2-4 weeks; an observability vendor swap is a weekend.
+
+**Three postures:**
+
+| Posture | Characterization | Scoring implication |
+|---|---|---|
+| **Exploratory (reversible in weeks)** | "This is a validation build; we can rip and replace." | Weight DX and time-to-ship heavily; weight exit-cost lightly. A 2/10 on exit cost is acceptable if DX is a 10/10. |
+| **Committed (reversible in 3-6 months with effort)** | "This is the serious build; we can migrate later but would prefer not to." | Default weighting. Exit cost matters; weight it at the published default. |
+| **Foundational (3+ year horizon, multi-engineer-month rewrite to reverse)** | "This decision outlives the current team; a rewrite would be a multi-quarter project." | Weight exit cost, compliance, ecosystem depth, and bus factor heavily. Reduce DX and cost weights. Most database, auth, payment, and primary-framework picks are foundational. |
+
+**If the user says nothing:** default to Committed. State it.
+
+**Dimension-specific reversibility defaults** (use these to pre-fill the picture even if the user answers only in aggregate):
+
+| Dimension | Typical reversibility |
+|---|---|
+| Database | Foundational (6-24 months to switch for a non-trivial app) |
+| ORM | Committed (2-12 weeks depending on app size) |
+| Auth provider | Committed (1-8 weeks, user-visible cutover) |
+| Primary framework | Foundational (rewrite-level work) |
+| UI library | Committed (2-12 weeks for leaf swap; longer for heavy custom) |
+| Hosting platform | Committed (1-6 weeks for most setups) |
+| Observability | Exploratory (weekend to weeks) |
+| Email provider | Exploratory (1-2 weeks, mostly DNS) |
+| Payments | Foundational for the primary processor; committed for MoR layering |
+| Background jobs | Committed (2-8 weeks for non-trivial pipelines) |
+
+The foundational picks get the scoring rigor; exploratory picks can skip the full pass (see `scoring-framework.md` § "When to skip the scoring pass entirely").
+
 ## From answers to the constraint map
 
 The constraint map converts pre-flight answers into two buckets.

@@ -61,10 +61,12 @@ Use these weights unless the user overrides. State the default vector in the out
 
 ```
 DX                        20%
-Scale ceiling             15%
-Cost at target scale      15%
-Ecosystem / maturity      15%
-Ops burden                15%
+Scale ceiling             13%
+Cost at target scale      13%
+Ecosystem depth            8%
+Ecosystem trajectory       7%
+Exit cost / reversibility  7%
+Ops burden                12%
 Compliance fit            10%
 Hireability               10%
 ```
@@ -72,12 +74,18 @@ Hireability               10%
 Rationale:
 
 - **DX (20%)**: the team builds this every day. A 1-point DX difference compounds over months of work.
-- **Scale ceiling (15%)**: hitting a ceiling is a forced rewrite; weight enough to matter.
-- **Cost at target scale (15%)**: price at the 12-month scale, not today.
-- **Ecosystem / maturity (15%)**: libraries, community answers, Stack Overflow depth. A 9-point DX library with a 3-point ecosystem is still risky.
-- **Ops burden (15%)**: self-host vs. managed is about team-hours.
-- **Compliance fit (10%)**: for unregulated domains, this rounds down; for regulated domains, override (see below).
+- **Scale ceiling (13%)**: hitting a ceiling is a forced rewrite; weight enough to matter.
+- **Cost at target scale (13%)**: price at the 12-month scale, not today.
+- **Ecosystem depth (8%)**: current scale of the community. StackOverflow questions, npm/PyPI downloads, library count, hireability overlap. Proxies the resources available *today*.
+- **Ecosystem trajectory (7%)**: where the ecosystem is going. State of JS "interest" and "retention" axes, release cadence, maintainer activity, bus factor. Split out from depth because a library can have high depth and flat trajectory (a stable default like Postgres) or low depth and high trajectory (a rising candidate like Hono). Collapsing both loses signal.
+- **Exit cost / reversibility (7%)**: the rebuild bill if this pick is wrong. Scored 1-10 where 10 = "swap in a day, no data migration" and 1 = "full rewrite in a proprietary query language." Convex and Firebase score well on DX but lower here; Postgres + a thin ORM scores high. This axis used to live only in the Tier 3 tradeoff narrative; evidence from migration postmortems (see `RESEARCH-2026-04.md`) shows it is material at score-time, not just narrative-time.
+- **Ops burden (12%)**: self-host vs. managed is about team-hours.
+- **Compliance fit (10%)**: for unregulated domains this rounds down; for regulated domains, compliance acts as a *filter* in Step 2, and this weight governs compliance *quality* within the filtered set (audit log depth, subprocessor chain, BAA tier availability).
 - **Hireability (10%)**: matters at scale, less for solo founders.
+
+### On the 12-dimension count
+
+ASQ, Pugh, and ThoughtWorks frameworks converge on 4-8 criteria as the sweet spot for a single decision. stack-ready uses 12 dimensions because a fullstack bundle has 12 independent architectural seams (framework, language, database, ORM, auth, UI, client state, hosting, observability, payments, email, background jobs), each of which meaningfully changes the bundle. Collapsing seams loses information. The *aggregate* is a summary, not the decision; the per-dimension scores and the tradeoff narrative are where the actual reasoning lives. Users who find 12 axes overwhelming can read the aggregate alone; users who want depth can read the full table.
 
 ## Override mechanics
 
@@ -97,10 +105,30 @@ The user says in natural language:
 The user hands over a vector:
 
 ```
-DX 30, Scale 10, Cost 20, Ecosystem 15, Ops 10, Compliance 5, Hireability 10
+DX 30, Scale 10, Cost 20, EcoDepth 6, EcoTraj 4, Exit 5, Ops 10, Compliance 5, Hireability 10
 ```
 
 Must sum to 100. Skill states it back to confirm before scoring.
+
+## When to skip the scoring pass entirely
+
+The anti-scoring camp (Dan McKinley's "Choose Boring Technology," DHH's "one-person framework," Pieter Levels' "PHP + SQLite") argues formal scoring can itself be a failure mode: a small experienced team already knows the answer, and paralysis by analysis costs more than the occasional wrong pick. stack-ready should honor this when it applies.
+
+**Skip the full scoring pass when all three are true:**
+
+1. The user states an explicit preference grounded in experience: "we've shipped three apps on Rails; we're picking Rails again."
+2. The decision is reversible within ~4 weeks if wrong (see pre-flight question 7).
+3. No hard constraints are in flux (compliance posture unchanged, scale ceiling same order of magnitude).
+
+In that case, run a compact pre-flight + constraint check only (5 minutes, not 30). Confirm the stated pick against the domain's hard constraints. If it passes, write the DECISION.md with "Bundle chosen by experience-based preference; full scoring pass skipped per §skip-scoring-pass in scoring-framework.md."
+
+**Do not skip** when:
+- The decision is foundational (database, compliance posture, hosting platform for a multi-year product).
+- The user is asking "should we pick X" (the question implies they want the scoring).
+- A regulated domain is in scope (compliance filter is still mandatory, even if picks beyond the filter are trusted).
+- The user has named conflicting preferences ("we want both Convex and Prisma") that require a scoring pass to resolve.
+
+This is not a concession to vibes-based decision-making. It is recognition that formal scoring has a target domain: non-trivial, non-reversible, non-obvious decisions. Small, reversible, obvious decisions do not need it.
 
 ## Domain-specific weight remaps
 

@@ -914,6 +914,127 @@ Convex for SaaS, Shopify Hydrogen for e-commerce, Sanity for CMS, Phoenix LiveVi
 
 Enterprise bundles look similar across domains: Next.js + TypeScript + Postgres (or ClickHouse) + WorkOS + AWS + Datadog + Temporal/Inngest + Stripe. The domain shapes the periphery (Algolia for marketplace, Medplum for healthcare, LTI for education, Cube for analytics).
 
+## Named alternative bundles (new in 1.1.0)
+
+Cross-domain bundles surfaced by the 2026-04 research. Each is a coherent, compatibility-checked stack that cuts across the 12 domains.
+
+### Cloudflare-native
+
+For greenfield Workers-first apps where edge latency and bundled primitives matter. Production-credible after D1/Queues/Hyperdrive GA (April 2024) and Workflows GA (2025).
+
+| Dimension | Pick |
+|---|---|
+| Framework | Next.js 15 on Workers, Hono, or Astro (for content-heavy) |
+| Language | TypeScript |
+| Database | Cloudflare D1 (SQLite edge) or Hyperdrive + Neon Postgres |
+| ORM | Drizzle |
+| Auth | Better Auth (self-hosted on Workers) or Clerk |
+| UI | shadcn/ui + Radix |
+| Client state | TanStack Query or Server Components |
+| Hosting | Cloudflare Pages / Workers |
+| Observability | Axiom (Workers Logs native) + Sentry |
+| Payments | Stripe |
+| Email | Resend |
+| Background jobs | Cloudflare Queues + Workflows (or Inngest for complex workflows) |
+| File storage | Cloudflare R2 |
+
+**Coherence:** Every layer runs on Cloudflare. R2 cuts egress vs S3. Durable Objects available for stateful requirements. Astro bundle particularly clean given the Cloudflare + Astro acquisition (Jan 2026).
+
+**Flip** when: heavy Postgres transactional workload without Hyperdrive caching fit; need for multi-tenant SQLite-per-tenant that exceeds Durable Object Facets' scale; team without edge-runtime familiarity.
+
+### Post-Cloud Rails
+
+For Ruby teams with ops bandwidth, biased toward self-host economics. Quantified savings from 37signals ($10M+/5yr cloud exit) make this a credible default, not a meme.
+
+| Dimension | Pick |
+|---|---|
+| Framework | Rails 8 + Hotwire/Turbo |
+| Language | Ruby |
+| Database | Postgres (or SQLite with Rails 8 defaults for smaller apps) |
+| ORM | ActiveRecord |
+| Auth | Devise (or Clerk for JS-heavy SPA layers if used) |
+| UI | Tailwind + custom, or ViewComponent + Phlex |
+| Client state | Hotwire (Turbo + Stimulus) |
+| Hosting | Kamal 2 + Hetzner VPS |
+| Observability | AppSignal (Rails-native) + Sentry |
+| Payments | Stripe |
+| Email | Postmark |
+| Background jobs | Solid Queue (Rails 8 default, Postgres-backed) or Sidekiq |
+| File storage | S3 or R2 (via Active Storage) |
+
+**Coherence:** Kamal 2 ships with Rails 8. Solid Queue removes Redis dependency. One language, one runtime, one deploy story. Entire stack self-hostable on a €50/mo Hetzner box for moderate scale.
+
+**Flip** when: team lacks Ruby depth; compliance procurement requires big-three cloud providers (AWS/GCP/Azure) by contract; workload requires edge latency (use Cloudflare-native or Vercel instead).
+
+### Phoenix LiveView
+
+For Elixir teams on real-time / soft-realtime domains (helpdesk, collab, presence, live dashboards). LiveView 1.0 shipped late 2024; 1.1 in 2025; production case studies real (Multiverse, Stord, Bleacher Report, Erlang Solutions).
+
+| Dimension | Pick |
+|---|---|
+| Framework | Phoenix + LiveView 1.1 |
+| Language | Elixir |
+| Database | Postgres |
+| ORM | Ecto |
+| Auth | Phoenix auth generators (or pow) |
+| UI | Tailwind + LiveView components |
+| Client state | LiveView-native (HTML over the wire) |
+| Hosting | Fly.io (BEAM-native clustering support) |
+| Observability | AppSignal (Elixir-native) + Sentry |
+| Payments | Stripe |
+| Email | Postmark |
+| Background jobs | Oban (Postgres-backed) |
+
+**Coherence:** Soft real-time by default. One language, no separate JS framework needed for most surfaces. BEAM concurrency is a match for helpdesk, presence, chat, live dashboards.
+
+**Flip** when: team has no Elixir depth (hiring risk); product requires deep native-mobile or offline-first story; very heavy client-side canvas / visualization that exceeds LiveView's server-driven ceiling.
+
+### Django + HTMX + Alpine
+
+For Python teams shipping content-heavy or admin-heavy apps without adding a JS framework. HTMX adoption among Django devs grew from 5% to 24% (2021-2025); Django 6.0 template partials make this canonical.
+
+| Dimension | Pick |
+|---|---|
+| Framework | Django 6 + HTMX + Alpine.js |
+| Language | Python |
+| Database | Postgres |
+| ORM | Django ORM (or SQLAlchemy for decoupled parts) |
+| Auth | django-allauth |
+| UI | Tailwind + custom |
+| Client state | HTMX (server-rendered HTML over the wire) |
+| Hosting | Fly.io, Render, or self-host with Dokku/Coolify |
+| Observability | Sentry |
+| Payments | Stripe |
+| Email | Postmark |
+| Background jobs | Celery or Dramatiq |
+
+**Coherence:** Django admin out of the box for internal tooling. HTMX handles 80% of modern interactivity needs without shipping a JS framework. Strong for CMS, B2B admin, and internal tools.
+
+**Flip** when: team has no Python depth; product requires heavy client-side interactivity where HTMX's server-round-trip model is user-visible; need for native mobile.
+
+### TALL / Laravel + Livewire
+
+For PHP teams shipping SaaS with Livewire (62%) or Inertia (48%) per State of Laravel 2025.
+
+| Dimension | Pick |
+|---|---|
+| Framework | Laravel 12 + Livewire (or Inertia + Vue/React) |
+| Language | PHP |
+| Database | Postgres or MySQL |
+| ORM | Eloquent |
+| Auth | Laravel Breeze / Fortify / Jetstream |
+| UI | Tailwind + Alpine.js + Livewire components |
+| Client state | Livewire (server-driven) or Inertia |
+| Hosting | Laravel Forge + VPS, or Fly.io, or Render |
+| Observability | Sentry, Flare |
+| Payments | Stripe (Laravel Cashier) |
+| Email | Postmark |
+| Background jobs | Laravel Queues (Redis/Horizon) |
+
+**Coherence:** Laravel's tight ecosystem; Livewire + Alpine + Tailwind (the TALL stack) handles most SaaS UI without a JS framework. Laravel Forge + a VPS is the canonical cheap-and-happy deploy.
+
+**Flip** when: team has no PHP depth; product needs native mobile as first-class; very heavy client-side state that exceeds Livewire's server-driven model.
+
 ## Using a bundle
 
 The bundle is a starting shortlist, not a verdict. In Step 5, score each candidate against the pre-flight answers. In Step 6, name the flip point for the bundle the user is leaning toward. In Step 8, the chosen bundle plus its rationale becomes `.stack-ready/DECISION.md`.

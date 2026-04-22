@@ -31,16 +31,16 @@ Scores in the tables are shown as guidelines (1-10) under the default weight vec
 
 | Dimension | Top pick | Runner-up | Budget | Avoid |
 |---|---|---|---|---|
-| Framework | Next.js 15 (9) | Remix v2+ (8) | SvelteKit (7) | Raw Express/Fastify for fullstack |
+| Framework | Next.js 15 (9) | React Router v7 (8, ex-Remix v2) | SvelteKit (7) | Raw Express/Fastify for fullstack |
 | Language | TypeScript (9) | Ruby (Rails path) (8) | Python (Django path) (7) | Go for frontend-heavy SaaS |
 | Database | Postgres (10) | MySQL (7) | SQLite (dev only) (6) | MongoDB without explicit reason |
 | ORM | Drizzle (9) | Prisma (8) | Kysely (7) | Raw SQL in TS without a thin wrapper |
-| Auth | WorkOS (9 enterprise) / Better Auth (9 standard) | Clerk (8) | Auth.js (7) | Rolling your own |
+| Auth | WorkOS (9 enterprise) / Better Auth (9 standard) | Clerk (8) | Auth.js (5, now in security-patch mode; for new projects use Better Auth) | Rolling your own |
 | UI library | shadcn/ui + Radix (9) | Mantine (8) | Tailwind + custom (7) | Enterprise UI kits with lock-in |
 | Client state | TanStack Query (9) | Server Components + Actions (9) | SWR (7) | Redux for a new SaaS |
 | Hosting | Vercel (8) / Railway (8) | Fly.io (7) | Render (7) | DIY Kubernetes for a 3-person team |
 | Observability | Sentry (9) + Axiom (8) | Datadog (8) | Grafana Cloud free (6) | console.log only |
-| Payments | Stripe (10) | Paddle (8, if MoR needed) | Lemon Squeezy (7) | Building a custom subscription engine |
+| Payments | Stripe (10) | Paddle (8, if MoR needed) | Polar (8, low-fee MoR) / Lemon Squeezy (6, acquired by Stripe, absorbing into SMP) | Building a custom subscription engine |
 | Email | Resend (9) | Postmark (9) | SendGrid (6) | AWS SES without a deliverability plan |
 | Background jobs | Inngest (9) | Trigger.dev (8) | BullMQ (7) | Cron jobs in the web process |
 
@@ -111,12 +111,12 @@ Scores in the tables are shown as guidelines (1-10) under the default weight vec
 | Language | TypeScript (9) | JavaScript (7) | Go (5 for CMS) | Exotic stacks for editorial UX |
 | Database | Postgres (9) | SQLite (8, read-heavy) | MongoDB (7 if Payload) | NoSQL for relational editorial metadata |
 | ORM | Drizzle (8) | Prisma (8) | Payload's own data layer (8 if Payload) | Rolling custom ORM for CMS |
-| Auth | Better Auth (8) | Clerk (8) | Auth.js (7) | Rolling auth into the CMS itself |
+| Auth | Better Auth (8) | Clerk (8) | Auth.js (5, now in security-patch mode; for new projects use Better Auth) | Rolling auth into the CMS itself |
 | UI library | shadcn/ui + Radix (9 admin) | Mantine (8) | Tailwind + custom (7) | Admin frameworks that fight your brand |
 | Client state | Server Components (9) | TanStack Query (9) | SWR (7) | Client-only data fetching for SEO-critical |
 | Hosting | Vercel (9 with ISR) | Netlify (8) | Cloudflare Pages (8) | Static-only hosting for a CMS with write needs |
 | Observability | Sentry (9) | Axiom (8) | Grafana Cloud (6) | No observability for editorial workflow bugs |
-| Payments | Stripe (9 if paid tier) | (N/A for ads-supported) | Lemon Squeezy (7) | Rolling your own subscription management |
+| Payments | Stripe (9 if paid tier) | (N/A for ads-supported) | Polar (8, low-fee MoR) / Lemon Squeezy (6, acquired by Stripe, absorbing into SMP) | Rolling your own subscription management |
 | Email | Resend (9) | Postmark (9) | Buttondown/ConvertKit (8 if newsletter-first) | SES without a newsletter partner |
 | Background jobs | Inngest (8) | BullMQ (7) | Cron (6) | Synchronous cache invalidation on publish |
 
@@ -154,7 +154,7 @@ Scores in the tables are shown as guidelines (1-10) under the default weight vec
 | Client state | TanStack Query (9) | Server Components (9) | SWR (7) | Optimistic updates on monetary ops without rollback |
 | Hosting | AWS (8, with HIPAA-style controls if sensitive) | Vercel (8, check SOC 2 tier) | Render (7) | Consumer-tier hosting for transactional money |
 | Observability | Datadog (9) | Sentry (9) + Honeycomb (9) | Grafana Cloud (7) | Under-logging for money events |
-| Payments | Stripe (10) or Adyen (9) for enterprise | Paddle (8, MoR) | Lemon Squeezy (7 for digital-only) | Handling card data on own servers |
+| Payments | Stripe (10) or Adyen (9) for enterprise | Paddle (8, MoR) | Polar (8, indie MoR) / Lemon Squeezy (6, acquired by Stripe) | Handling card data on own servers |
 | Email | Postmark (9, compliance-oriented) | Resend (9) | AWS SES (7 with DKIM/SPF) | Bulk email providers for transactional |
 | Background jobs | Inngest (9) | Temporal (9, complex workflows) | Sidekiq (8, Rails) | Unreliable queues for financial events |
 
@@ -230,7 +230,7 @@ Scores in the tables are shown as guidelines (1-10) under the default weight vec
 | Client state | TanStack Query (9) | Server Components (9) | SWR (7) | Over-clientified architectures on flaky school networks |
 | Hosting | Vercel (8) | AWS (8) | Render (7) | Edge-only hosting for long assignment uploads |
 | Observability | Sentry (9) | Datadog (8) | Grafana Cloud (7) | Session replay without FERPA/COPPA consent |
-| Payments | Stripe (9, if paid courses) | Paddle (8, MoR) | Lemon Squeezy (7) | Rolling your own tuition billing |
+| Payments | Stripe (9, if paid courses) | Paddle (8, MoR) | Polar (8, low-fee MoR) / Lemon Squeezy (6, acquired by Stripe, absorbing into SMP) | Rolling your own tuition billing |
 | Email | Postmark (9) | Resend (9) | SendGrid (7) | Marketing-first email for student notifications |
 | Background jobs | Inngest (8) | Sidekiq (8, Rails) | BullMQ (7) | Long video processing in the web process |
 | Video | Mux (9) | Cloudflare Stream (9) | YouTube unlisted (6, no control) | Self-hosting video at scale |
@@ -268,7 +268,7 @@ Scores in the tables are shown as guidelines (1-10) under the default weight vec
 | Client state | TanStack Query (9) | Convex hooks (9 if Convex) | SWR (8) | Heavy client caches without invalidation plan |
 | Hosting | Vercel (8) | Railway (8) | Fly.io (7) | DIY for analytics ingest at scale |
 | Observability | Sentry (9) + PostHog (10, product analytics) | Segment + Datadog (8) | Plausible + Grafana (7) | Building your own analytics |
-| Payments | Stripe (9, if seat-based CRM) | Paddle (8) | Lemon Squeezy (7) | Complex per-contact pricing without a billing engine |
+| Payments | Stripe (9, if seat-based CRM) | Paddle (8) | Polar (8, low-fee MoR) / Lemon Squeezy (6, acquired by Stripe, absorbing into SMP) | Complex per-contact pricing without a billing engine |
 | Email | Resend (9) or Postmark (9) for transactional; Customer.io (9) or Loops (9) for marketing | SendGrid (7) | AWS SES (7 with care) | One provider for both transactional and marketing at scale |
 | Background jobs | Inngest (9) | Trigger.dev (9) | BullMQ (7) | In-process background work for event ingest |
 
