@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.1.1] - 2026-04-22
+
+Documentation-only patch. Reflects the arrival of deploy-ready v1.0.0 (https://github.com/aihxp/deploy-ready) as a live sibling in the ready-suite. No behavioral changes to the skill.
+
+### Added
+
+- **`SUITE.md` at repo root.** Byte-identical copy of the suite map shared across every ready-suite sibling. Stack-ready did not previously ship one; this patch closes that gap so the byte-identical invariant holds across all live siblings (production-ready 2.5.2, stack-ready 1.1.1, deploy-ready 1.0.0).
+
+### Changed
+
+- **SKILL.md frontmatter version** bumped to 1.1.1. Template version stamps in DECISION.md, STATE.md, and the staleness-check output updated to match. No content change beyond the version tag.
+
+### Why a patch, not a minor
+
+The skill's behavior, references, and scoring contract are unchanged. Only the cross-sibling SUITE.md and the version stamps are touched. Per the suite versioning discipline, patch-level is the honest bucket for documentary-only sibling-ship tracking.
+
+---
+
 ## [1.1.0] - 2026-04-22
 
 Research-driven refresh. Six parallel research threads (framework, data, auth/payments/email, hosting/observability/queues, decision methodology, cross-language) produced a consolidated dossier and surgical updates across every reference file. No architectural changes; all edits are evidence-backed against primary sources captured in `references/RESEARCH-2026-04.md`.

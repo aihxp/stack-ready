@@ -1,7 +1,7 @@
 ---
 name: stack-ready
 description: "Choose the right stack for a project before building it. Triggers on 'what stack should I use,' 'Next.js vs. Remix,' 'pick a database,' 'Postgres or Mongo,' 'which auth provider,' 'should I use Convex,' 'hosting recommendation,' 'move from Firebase to Supabase,' or any request to evaluate tech choices for a specific job. Outputs a ranked, scored shortlist with tradeoffs, pairing compatibility checks, and bundle recommendations tailored to domain, team size, budget, and time-to-ship. Stops at the recommendation: does not build the app (that's production-ready) or configure the repo (that's repo-ready). Not for purely abstract language debates with no project attached. Full trigger list in README."
-version: 1.1.0
+version: 1.1.1
 updated: 2026-04-22
 changelog: CHANGELOG.md
 compatible_with:
@@ -186,7 +186,7 @@ Contents:
 # Stack Decision
 
 ## Skill version
-stack-ready 1.1.0, 2026-04-22. If a newer version runs this artifact through again, re-run the staleness check (Step 9) before making stack changes.
+stack-ready 1.1.1, 2026-04-22. If a newer version runs this artifact through again, re-run the staleness check (Step 9) before making stack changes.
 
 ## Project
 [one-line description]
@@ -252,7 +252,7 @@ Three real deployments with a comparable stack at comparable scale, each in one 
 Stack recommendations rot. At the end of every run, print:
 
 ```
-Skill version: stack-ready 1.1.0
+Skill version: stack-ready 1.1.1
 Last updated: 2026-04-22
 Current date: [today]
 ```
@@ -369,7 +369,7 @@ Stack decisions can span sessions, especially in Mode C (audit) or Mode D (migra
 # Stack-Ready State
 
 ## Skill version
-stack-ready 1.1.0, 2026-04-22.
+stack-ready 1.1.1, 2026-04-22.
 
 ## Current tier
 Working toward Tier [N]. Last completed tier: [N-1].
