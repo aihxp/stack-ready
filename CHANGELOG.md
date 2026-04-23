@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.1.3 (2026-04-23)
+
+Documentation-only patch. Reflects the arrival of repo-ready v1.6.0 as a live sibling in the ready-suite with its suite-membership retrofit (frontmatter interop fields, SUITE.md, Unicode cleanup). No behavioral changes to the skill.
+
+### Changed
+
+- **SUITE.md known-good versions table** updated: repo-ready now shows version 1.6.0 and its repo URL instead of "See its CHANGELOG."
+- **SKILL.md frontmatter version** bumped to 1.1.3. No content change beyond the version tag.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
