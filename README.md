@@ -8,7 +8,7 @@ AI stack recommendations have a specific failure mode. They *sound* authoritativ
 
 Stack Ready is a **skill**, a structured AI instruction set that any coding agent can consume. It produces stack recommendations that name the weighting assumptions, the failure mode that would flip the choice, the scale ceiling, and the switching cost, for 12 domains across 12 scoring dimensions.
 
-> **Pairs with [production-ready](https://github.com/aihxp/production-ready) and [repo-ready](https://github.com/aihxp/repo-ready).** Stack Ready picks the stack; Production Ready builds the app; Repo Ready wraps the repo. Three tight skills that compose.
+> **Part of the [ready-suite](SUITE.md)**, a composable set of ten AI skills covering the full arc from idea to launch (planning, building, shipping). Stack Ready is one of the four planning-tier skills. See [`SUITE.md`](SUITE.md) for the full map.
 
 <p align="center">
 <strong>12 domains</strong> &nbsp;·&nbsp; <strong>12 scoring dimensions</strong> &nbsp;·&nbsp; <strong>41 compatibility-checked bundles</strong> &nbsp;·&nbsp; <strong>4 decision tiers</strong> &nbsp;·&nbsp; <strong>~150 verified sources</strong>
